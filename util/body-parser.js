@@ -7,7 +7,13 @@ module.exports = (request) => {
         body += chunk;
       });
       request.on('end', () => {
-        resolve(JSON.parse(body));
+        const parsedBody = JSON.parse(body);
+
+        if (parsedBody.username && parsedBody.age && parsedBody.hobbies) {
+          resolve(parsedBody);
+        } else {
+          reject('Body does not contain required fields')
+        }
       });
     } catch (err) {
       console.log(err);
