@@ -1,16 +1,14 @@
+const { REGEX_UUID, getId, getBaseUrl } = require('../helpers');
+
 module.exports = (req, res) => {
-  const baseUrl = req.url.substring(0, req.url.lastIndexOf('/') + 1);
-  const id = req.url.split('/')[3]; // TODO: 3
-  const regexV4 = new RegExp(
-    /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/
-  );
+  const id = getId(req);
 
   if (req.url === '/api/users') {
     res.statusCode = 200;
     res.setHeader('Content-Type', 'application/json');
     res.write(JSON.stringify(req.users));
     res.end();
-  } else if (!regexV4.test(id)) {
+  } else if (!REGEX_UUID.test(id)) {
     res.writeHead(400, { 'Content-Type': 'application/json' });
     res.end(
       JSON.stringify({
@@ -18,7 +16,7 @@ module.exports = (req, res) => {
         message: 'UUID is not valid',
       })
     );
-  } else if (baseUrl === '/api/users/' && regexV4.test(id)) {
+  } else if (getBaseUrl(req) === '/api/users/' && REGEX_UUID.test(id)) {
     res.setHeader('Content-Type', 'application/json');
     const foundUser = req.users.find((user) => user.id === id);
 

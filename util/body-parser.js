@@ -12,7 +12,7 @@ module.exports = (request) => {
         if (parsedBody.username && parsedBody.age && parsedBody.hobbies) {
           resolve(parsedBody);
         } else {
-          reject('Body does not contain required fields')
+          reject('Body does not contain required fields');
         }
       });
     } catch (err) {
