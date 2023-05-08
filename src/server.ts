@@ -1,14 +1,14 @@
-const http = require('http');
-const getReq = require('./methods/get-request');
-const postReq = require('./methods/post-request');
-const putReq = require('./methods/put-request');
-const deleteReq = require('./methods/delete-request');
-const users = require('./data.json');
+import { createServer, ServerResponse } from 'http';
+import { getReq } from './methods/get-request';
+import { deleteReq } from './methods/delete-request';
+import { postReq } from './methods/post-request';
+import { putReq } from './methods/put-request';
+const users = require('../data.json');
 // require('dotenv').config();
 
 const PORT = process.env.PORT || 5001;
 
-const server = http.createServer((req, res) => {
+const server = createServer((req: any, res: ServerResponse) => {
   req.users = users;
 
   switch (req.method) {

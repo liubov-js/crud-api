@@ -1,11 +1,15 @@
-const crypto = require('crypto');
-const requestBodyParser = require('../util/body-parser');
-const writeToFile = require('../util/write-to-file');
+import * as crypto from 'crypto';
+import { IncomingMessage, ServerResponse } from 'http';
+import { bodyParser, writeToFile } from '../utils';
+import { User } from '../interfaces';
 
-module.exports = async (req, res) => {
+export const postReq = async (
+  req: IncomingMessage & { users: User[] },
+  res: ServerResponse
+) => {
   if (req.url === '/api/users') {
     try {
-      const body = await requestBodyParser(req);
+      const body = await bodyParser(req);
       body.id = crypto.randomUUID();
       req.users.push(body);
       writeToFile(req.users);

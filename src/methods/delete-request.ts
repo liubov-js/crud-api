@@ -1,7 +1,12 @@
-const writeToFile = require('../util/write-to-file');
-const { REGEX_UUID, getBaseUrl, getId } = require('../helpers');
+import { REGEX_UUID, getId, getBaseUrl } from '../helpers';
+import { IncomingMessage, ServerResponse } from 'http';
+import { writeToFile } from '../utils';
+import { User } from '../interfaces';
 
-module.exports = (req, res) => {
+export const deleteReq = (
+  req: IncomingMessage & { users: User[] },
+  res: ServerResponse
+) => {
   const id = getId(req);
 
   if (!REGEX_UUID.test(id)) {
@@ -13,7 +18,7 @@ module.exports = (req, res) => {
       })
     );
   } else if (getBaseUrl(req) === '/api/users/' && REGEX_UUID.test(id)) {
-    const index = req.users.findIndex((user) => user.id === id);
+    const index = req.users.findIndex((user: User) => user.id === id);
 
     if (index === -1) {
       res.statusCode = 404;

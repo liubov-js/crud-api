@@ -1,6 +1,11 @@
-const { REGEX_UUID, getId, getBaseUrl } = require('../helpers');
+import { REGEX_UUID, getId, getBaseUrl } from '../helpers';
+import { IncomingMessage, ServerResponse } from 'http';
+import { User } from '../interfaces';
 
-module.exports = (req, res) => {
+export const getReq = (
+  req: IncomingMessage & { users: User[] },
+  res: ServerResponse
+) => {
   const id = getId(req);
 
   if (req.url === '/api/users') {
@@ -18,7 +23,7 @@ module.exports = (req, res) => {
     );
   } else if (getBaseUrl(req) === '/api/users/' && REGEX_UUID.test(id)) {
     res.setHeader('Content-Type', 'application/json');
-    const foundUser = req.users.find((user) => user.id === id);
+    const foundUser = req.users.find((user: User) => user.id === id);
 
     if (foundUser) {
       res.statusCode = 200;

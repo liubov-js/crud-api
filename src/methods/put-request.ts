@@ -1,8 +1,12 @@
-const requestBodyParser = require('../util/body-parser');
-const writeToFile = require('../util/write-to-file');
-const { REGEX_UUID, getId, getBaseUrl } = require('../helpers');
+import { REGEX_UUID, getId, getBaseUrl } from '../helpers';
+import { IncomingMessage, ServerResponse } from 'http';
+import { bodyParser, writeToFile } from '../utils';
+import { User } from '../interfaces';
 
-module.exports = async (req, res) => {
+export const putReq = async (
+  req: IncomingMessage & { users: User[] },
+  res: ServerResponse
+) => {
   const id = getId(req);
 
   if (!REGEX_UUID.test(id)) {
@@ -15,8 +19,8 @@ module.exports = async (req, res) => {
     );
   } else if (getBaseUrl(req) === '/api/users/' && REGEX_UUID.test(id)) {
     try {
-      const body = await requestBodyParser(req);
-      const index = req.users.findIndex((user) => user.id === id);
+      const body: User = await bodyParser(req);
+      const index = req.users.findIndex((user: User) => user.id === id);
 
       if (index === -1) {
         res.statusCode = 404;
