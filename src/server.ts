@@ -4,7 +4,7 @@ import { deleteReq } from './methods/delete-request';
 import { postReq } from './methods/post-request';
 import { putReq } from './methods/put-request';
 const users = require('../data.json');
-// require('dotenv').config();
+require('dotenv').config();
 
 const PORT = process.env.PORT || 5001;
 
